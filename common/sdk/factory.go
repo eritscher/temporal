@@ -66,8 +66,7 @@ func (f *clientFactory) NewClient(namespaceName string, logger log.Logger) (sdkc
 		MetricsHandler: f.metricsHandler,
 		Logger:         log.NewSdkLogger(logger),
 		ConnectionOptions: sdkclient.ConnectionOptions{
-			TLS:                f.tlsConfig,
-			DisableHealthCheck: true,
+			TLS: f.tlsConfig,
 		},
 	})
 	if err != nil {
