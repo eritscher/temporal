@@ -78,8 +78,9 @@ func Dial(hostName string, tlsConfig *tls.Config, logger log.Logger, customDialO
 		MinConnectTimeout: minConnectTimeout,
 	}
 	cp.Backoff.MaxDelay = MaxBackoffDelay
-
-	dialOptions := []grpc.DialOption{
+	var dialOptions []grpc.DialOption
+	dialOptions = append(dialOptions, customDialOptions...)
+	dialOptions = append(dialOptions,
 		grpcSecureOpt,
 		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(maxInternodeRecvPayloadSize)),
 		grpc.WithChainUnaryInterceptor(
@@ -90,8 +91,7 @@ func Dial(hostName string, tlsConfig *tls.Config, logger log.Logger, customDialO
 		grpc.WithDefaultServiceConfig(DefaultServiceConfig),
 		grpc.WithDisableServiceConfig(),
 		grpc.WithConnectParams(cp),
-	}
-	dialOptions = append(dialOptions, customDialOptions...)
+	)
 
 	return grpc.Dial(
 		hostName,
